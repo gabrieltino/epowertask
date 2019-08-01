@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Loader from "../loader.gif";
+import Loader from "../spinner.gif";
 import Pagination from "./Pagination";
 
 class Listposts extends Component {
@@ -14,23 +14,25 @@ class Listposts extends Component {
     };
   }
   componentDidMount() {
-    fetch("https://epower.ng/wp-json/wp/v2/posts")
-      .then(res => res.json())
-      .then(data => {
-        if (data.length) {
-          this.setState({
-            loading: false,
-            posts: data
-          });
-        } else {
-          this.setState({
-            loading: false,
-            posts: data,
-            error: "Not available"
-          });
-        }
-      })
-      .catch(err => this.setState({ error: err }));
+    this.setState({ loading: true }, () => {
+      fetch("https://epower.ng/wp-json/wp/v2/posts")
+        .then(res => res.json())
+        .then(data => {
+          if (data.length) {
+            this.setState({
+              loading: false,
+              posts: data
+            });
+          } else {
+            this.setState({
+              loading: true,
+              posts: data,
+              error: "Not available"
+            });
+          }
+        })
+        .catch(err => this.setState({ error: err }));
+    });
   }
 
   nextpage = () => {
@@ -61,7 +63,7 @@ class Listposts extends Component {
     const blogposts = currentposts.length
       ? currentposts.map(blogpost => (
           <div key={blogpost.id} className="col-4 mb-3">
-            <div className="card" style={{ width: "18rem" }}>
+            <div className="card" style={{ width: "18.93rem" }}>
               <img
                 src={blogpost.featured_image_thumbnail}
                 className="card-img-top"
@@ -86,7 +88,7 @@ class Listposts extends Component {
               dangerouslySetInnerHTML={{ __html: error }}
             />
           )}
-          {/* {loading && <img className="loader" src={Loader} alt="Loader" />} */}
+          {loading && <img className="loader" src={Loader} alt="Loader" />}
           {blogposts}
         </div>
         <div className="row">
