@@ -19,3 +19,6 @@ img {
   width: 300px !important;
   height: 180px !important;
 }
+.previous {
+  margin-right: 3rem;
+}

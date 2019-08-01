@@ -33,26 +33,33 @@ class Listposts extends Component {
       .catch(err => this.setState({ error: err }));
   }
 
-  componentWillUnmount() {
-    this.setState({
-      loading: false
-    })
-  }
+  nextpage = () => {
+    let cpage = this.state.currentPage;
+    if (cpage => 1) {
+      this.setState({
+        currentPage: cpage + 1
+      });
+    }
+  };
 
-  paginate = (pageNumber) => {
-    this.setState({
-      currentPage: pageNumber
-    })
-  }
+  previouspage = () => {
+    let cpage = this.state.currentPage;
+    if (cpage > 1) {
+      this.setState({
+        currentPage: cpage - 1
+      });
+    }
+  };
 
   render() {
     const { loading, posts, error, currentPage, postsPerPage } = this.state;
 
     const indexofLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexofLastPost - postsPerPage;
-    const currentsposts = posts.slice(indexOfFirstPost, indexofLastPost);
+    const currentposts = posts.slice(indexOfFirstPost, indexofLastPost);
 
-    const blogposts = currentsposts.length ? (currentsposts.map(blogpost => (
+    const blogposts = currentposts.length
+      ? currentposts.map(blogpost => (
           <div key={blogpost.id} className="col-4 mb-3">
             <div className="card" style={{ width: "18rem" }}>
               <img
@@ -68,7 +75,7 @@ class Listposts extends Component {
               </div>
             </div>
           </div>
-        )))
+        ))
       : "";
     return (
       <div className="container">
@@ -83,11 +90,15 @@ class Listposts extends Component {
           {blogposts}
         </div>
         <div className="row">
-          <Pagination
-            totalPosts={posts.length}
-            postsPerPage={postsPerPage}
-            paginate={this.paginate}
-          />
+          <div className="col-5 offset-5">
+            <Pagination
+              totalPosts={posts.length}
+              postsPerPage={postsPerPage}
+              nextpage={this.nextpage}
+              previouspage={this.previouspage}
+              currentPage={currentPage}
+            />
+          </div>
         </div>
       </div>
     );
